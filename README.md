@@ -15,7 +15,7 @@
 **DocuAssist AI** es un sistema RAG (*Retrieval-Augmented Generation*) diseñado para asistir a empleados y técnicos en la consulta inteligente de documentación técnica y manuales de sistemas.
 
 El sistema procesa **preguntas en lenguaje natural** sobre:
-- 🖨️ **Equipos técnicos**: Impresoras fiscales, balanzas electrónicas
+- 🖨️ **Equipos técnicos**: Impresoras fiscales
 - 💻 **Sistemas de software**: Manuales de configuración y uso de sistemas internos
 - ⚙️ **Procedimientos**: Instalación, configuración, troubleshooting
 
@@ -43,31 +43,31 @@ El sistema procesa **preguntas en lenguaje natural** sobre:
 │  Dashboard | SearchHistory | ChatUI | Login             │
 └──────────────────────┬───────────────────────────────────┘
                        │ HTTP/JSON
-┌──────────────────────▼───────────────────────────────────┐
-│           BACKEND (FastAPI)                              │
+┌──────────────────────▼──────────────────────────────────┐
+│           BACKEND (FastAPI)                             │
 │  ┌──────────────────────────────────────────────────┐   │
 │  │         LANGGRAPH (Orquestador)                  │   │
 │  │  classify_intent → routing a nodos específicos   │   │
 │  └──────────────────┬───────────────────────────────┘   │
-│                     │                                    │
+│                     │                                   │
 │     ┌───────────────┼───────────────┐                   │
 │     ▼               ▼               ▼                   │
-│  greeting     documentation      out_of_scope          │
-│  (sin RAG)    (con RAG)          (sin RAG)             │
-│                     │                                    │
+│  greeting     documentation      out_of_scope           │
+│  (sin RAG)    (con RAG)          (sin RAG)              │
+│                     │                                   │
 │     ┌───────────────▼───────────────┐                   │
-│     │  Pipeline RAG    │                   │
+│     │  Pipeline RAG                 │                   │
 │     │  • Inferencia de filtros      │                   │
 │     │  • Retrieval (ChromaDB)       │                   │
 │     │  • Reranking (Cohere)         │                   │
 │     │  • Generation (Cohere)        │                   │
 │     └───────────────┬───────────────┘                   │
-│                     │                                    │
+│                     │                                   │
 │  ┌──────────────────▼────────────────┐                  │
 │  │  Historial (SQLite)               │                  │
 │  │  + Metadata (tipo, sistema, etc)  │                  │
 │  └───────────────────────────────────┘                  │
-└──────────────────────────────────────────────────────────┘
+└─────────────────────────────────────────────────────────┘
                        │
         ┌──────────────┴──────────────┐
         ▼                             ▼
@@ -110,14 +110,7 @@ DocuAssist-AI/
 │
 ├── backend/
 │   ├── README.md                      # Documentación específica del backend
-│   ├── ARQUITECTURA_Y_CODIGO.md       # Documentación técnica detallada
-│   ├── CHECKLIST_FINAL.md             # Checklist de implementación
-│   ├── DEMO_SCRIPT.md                 # Script para demostración
-│   ├── PRESENTACION_TIPS.md           # Tips para presentación
-│   ├── SLIDES_OUTLINE.md              # Estructura de slides
 │   ├── requirements.txt               # Dependencias de Python
-│   ├── migrate_history.py             # Script de migración de DB
-│   ├── test_optimized_flow.py         # Test de flujo optimizado
 │   ├── .env.example                   # Template de variables
 │   ├── app.db                         # Base de datos SQLite
 │   ├── app/
@@ -197,10 +190,9 @@ DocuAssist-AI/
     │   ├── App.css                    # Estilos del App
     │   ├── index.css                  # Estilos globales
     │   ├── pages/
-    │   │   ├── Dashboard.jsx          # Landing page
+    │   │   ├── Dashboard.jsx          # Dashaboard
     │   │   ├── AskAI.jsx              # Chat interactivo
     │   │   ├── SearchHistory.jsx      # Historial completo
-    │   │   └── Login.jsx              # Página de login
     │   ├── components/
     │   │   ├── chat/
     │   │   │   ├── ChatMessages.jsx
@@ -269,21 +261,7 @@ COHERE_API_KEY=tu_api_key_aqui
 ```
 
 
-#### 2.4 Preparar documentos (si vas a usar tus propios PDFs)
-
-Colocar PDFs en las carpetas:
-- `data/pdfs/tecnicos/` → Manuales de equipos
-- `data/pdfs/sistemas/` → Manuales de software
-
-Luego ingestar:
-
-```bash
-python -m app.vectorstore.ingest
-```
-
-Esto procesa los PDFs, extrae metadata, genera embeddings y los almacena en ChromaDB.
-
-**Nota:** Si usas el proyecto tal como está, ya tiene ChromaDB y la base de datos configuradas.
+**Nota:** El proyecto tal como está, ya tiene ChromaDB y la base de datos configuradas.
 
 ### Paso 3: Configurar Frontend
 
@@ -337,22 +315,23 @@ Enviar una pregunta y obtener respuesta con contexto.
 **Request:**
 ```json
 {
-  "question": "¿Cómo cambiar la IP de la impresora Hasar 320F?",
+  "question": "¿Qué indica el LED rojo encendido en la Hasar SMH/PT-250F?",
   "categoria_equipo": "impresora",
   "tipo_documentacion": "tecnica",
+  "subtipo": "fiscal"
   "marca": "hasar",
-  "modelo": "320F"
+  "modelo": "Impresora_fiscal_Hasar_SMH-PT-250F"
 }
 ```
 
 **Response:**
 ```json
 {
-  "answer": "Para cambiar la dirección IP de la impresora Hasar 320F...",
+  "answer": "El LED rojo encendido en la impresora Hasar SMH/PT-250F indica...",
   "sources": [
     {
-      "document": "Impresora_Hasar_320F_Manual.pdf",
-      "page": 45
+      "document": "Impresora_fiscal_Hasar_SMH-PT-250F",
+      "page": 8
     }
   ],
   "images": [],
@@ -374,11 +353,11 @@ GET /history?limit=10
 [
   {
     "id": 1,
-    "question": "¿Cómo cambiar IP?",
-    "answer": "Para cambiar la IP...",
+    "question": "¿Qué indica el LED rojo encendido en la Hasar SMH/PT-250F?",
+    "answer": "El LED rojo encendido en la impresora Hasar SMH/PT-250F indica...",
     "tipo_documentacion": "tecnica",
     "marca": "hasar",
-    "modelo": "320F",
+    "modelo": "Impresora_fiscal_Hasar_SMH-PT-250F",
     "created_at": "2025-12-18T10:30:00"
   }
 ]
@@ -403,17 +382,17 @@ Tiempo: ~100ms
 ### Ejemplo 2: Pregunta Técnica con Filtros Explícitos
 
 ```
-Usuario: "¿Cómo cambio la IP?"
+Usuario: "¿Qué indica el LED rojo encendido en la Hasar SMH/PT-250F?"
 Filtros enviados desde el frontend:
 {
   "marca": "hasar",
-  "modelo": "320F",
+  "modelo": "Impresora_fiscal_Hasar_SMH-PT-250F",
   "categoria_equipo": "impresora"
 }
 
 Sistema:
 - Usa RAG con filtros específicos
-- Busca solo en documentación de Hasar 320F
+- Busca solo en documentación de Hasar_SMH-PT-250F
 - Retorna respuesta específica del manual
 ```
 
@@ -435,14 +414,15 @@ Luego busca en documentación del sistema StarPOS Market
 ### Ejemplo 4: Pregunta con Inferencia de Modelo
 
 ```
-Usuario: "¿Cómo cambiar IP en la tmt20?"
+Usuario: "¿Qué señales indican que el controlador fiscal SMH/P-441F está bloqueado?"
 Sin filtros explícitos
 
 Sistema infiere automáticamente (Nivel 1 - model_inference):
 {
-  "marca": "epson",
-  "modelo": "Impresora_NO_fiscal_Epson_TM-T20",
-  "categoria_equipo": "impresora"
+  "marca": "hasar",
+  "modelo": "Impresora_fiscal_Hasar_SMH-P-441F",
+  "categoria_equipo": "impresora",
+  "subtipo": "fiscal"
 }
 
 Luego busca en documentación específica de ese modelo
@@ -555,9 +535,6 @@ El sistema tiene DOS niveles de inferencia:
 - `tipo_documentacion`: "tecnica" o "sistema" (según palabras clave)
 - `sistema`: Nombres de software predefinidos
   - "starpos", "star pos", "starpos market" → "StarPOSMarketManual"
-  - "backupmaster", "backup master" → "BackupMaster"
-  - "cloudsync", "cloud sync" → "CloudSync"
-  - "datavault", "data vault" → "DataVault"
 
 **Prioridad:** Los filtros explícitos del frontend SIEMPRE tienen prioridad sobre los inferidos.
 
@@ -633,6 +610,7 @@ npm run dev -- --port 3000
 - [ ] Multi-tenancy para múltiples empresas
 - [ ] Autenticación y autorización
 - [ ] Rate limiting y throttling
+- [ ] Implementar respuestas con imagenes descriptivas
 
 ---
 
