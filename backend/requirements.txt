@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+python-dotenv
+langchain
+langgraph
+cohere
+chromadb
+pypdf
+langchain-text-splitters
+sqlalchemy
+pytest
+passlib[bcrypt]

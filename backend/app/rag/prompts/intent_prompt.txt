@@ -1,0 +1,11 @@
+Clasificá la siguiente consulta del usuario en UNA sola categoría.
+
+Categorías posibles:
+- greeting: saludos, despedidas, agradecimientos.
+- documentation: consultas sobre documentación técnica, manuales, instalación, configuración, mantenimiento, solución de problemas operativos (atascos, errores, fallas), recambio de insumos y especificaciones.
+- out_of_scope: consultas que no pertenecen al dominio del sistema.
+
+Respondé SOLO con el nombre exacto de la categoría.
+
+Consulta:
+{question}
