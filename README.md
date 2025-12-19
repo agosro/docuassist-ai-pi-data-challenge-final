@@ -40,7 +40,7 @@ El sistema procesa **preguntas en lenguaje natural** sobre:
 ```
 ┌──────────────────────────────────────────────────────────┐
 │              FRONTEND (React 18+)                        │
-│  Dashboard | SearchHistory | ChatUI | Login             │
+│  Dashboard | SearchHistory | ChatUI |                    │
 └──────────────────────┬───────────────────────────────────┘
                        │ HTTP/JSON
 ┌──────────────────────▼──────────────────────────────────┐
