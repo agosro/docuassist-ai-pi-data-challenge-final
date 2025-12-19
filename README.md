@@ -6,7 +6,6 @@
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100%2B-green)](https://fastapi.tiangolo.com/)
 [![React](https://img.shields.io/badge/React-18%2B-61dafb)](https://react.dev/)
 [![Cohere](https://img.shields.io/badge/Cohere-API-orange)](https://cohere.com/)
-[![License](https://img.shields.io/badge/License-MIT-black)](LICENSE)
 
 ---
 
