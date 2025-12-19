@@ -9,4 +9,3 @@ pypdf
 langchain-text-splitters
 sqlalchemy
 pytest
-passlib[bcrypt]
