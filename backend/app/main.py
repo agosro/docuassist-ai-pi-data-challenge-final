@@ -18,9 +18,16 @@ def startup_event():
     init_db()
 
 # CORS (frontend futuro o pruebas locales)
+import os
+
+allow_origins = os.getenv(
+    "ALLOWED_ORIGINS",
+    "http://127.0.0.1:5173,http://localhost:5173,http://localhost:3000"
+).split(",")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # en prod se restringe
+    allow_origins=allow_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
