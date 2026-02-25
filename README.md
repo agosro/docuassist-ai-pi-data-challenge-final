@@ -305,6 +305,21 @@ El frontend estará en **http://localhost:5173** (o el puerto mostrado)
 
 ---
 
+## 🖼️ Capturas de Pantalla
+
+### Dashboard
+
+![Dashboard](docs/images/dashboard.png)
+
+### Chat
+
+![Chat](docs/images/chat.png)
+
+### Historial de Búsqueda
+
+![Historial de Búsqueda](docs/images/busqueda.png)
+
+
 ## 📊 Uso de la API
 
 ### POST /chat
